@@ -1,0 +1,94 @@
+{
+  "choices": [
+    {
+      "id": "math",
+      "en": "Mathematics",
+      "ua": "Математика",
+      "ru": "Математика"
+    },
+    {
+      "id": "physics",
+      "en": "Physics",
+      "ua": "Фізика",
+      "ru": "Физика"
+    },
+    {
+      "id": "informatics",
+      "en": "Informatics",
+      "ua": "Інформатика",
+      "ru": "Информатика"
+    },
+    {
+      "id": "chemistry",
+      "en": "Chemistry",
+      "ua": "Хімія",
+      "ru": "Химия"
+    },
+    {
+      "id": "biology",
+      "en": "Biology",
+      "ua": "Біологія",
+      "ru": "Биология"
+    },
+    {
+      "id": "geography",
+      "en": "Geography",
+      "ua": "Географія",
+      "ru": "География"
+    },
+    {
+      "id": "ukrainian_history",
+      "en": "Ukrainian History",
+      "ua": "Історія України",
+      "ru": "История Украины"
+    },
+    {
+      "id": "literature",
+      "en": "Literature",
+      "ua": "Література",
+      "ru": "Литература"
+    },
+    {
+      "id": "ukrainian_language",
+      "en": "Ukrainian Language",
+      "ua": "Українська мова",
+      "ru": "Украинский язык"
+    },
+    {
+      "id": "art",
+      "en": "Art",
+      "ua": "Мистецтво",
+      "ru": "Искусство"
+    },
+    {
+      "id": "russian_language",
+      "en": "Russian Language",
+      "ua": "Російська мова",
+      "ru": "Русский язык"
+    },
+    {
+      "id": "english_language",
+      "en": "English Language",
+      "ua": "Англійська мова",
+      "ru": "Английский язык"
+    },
+    {
+      "id": "german_language",
+      "en": "German Language",
+      "ua": "Німецька мова",
+      "ru": "Немецкий язык"
+    },
+    {
+      "id": "other_language",
+      "en": "Other language (write in the comment)",
+      "ua": "Інша іноземна мова (вкажіть у коментарях)",
+      "ru": "Другой иностранный язык (указать в комментариях)"
+    },
+    {
+      "id": "other",
+      "en": "Other subject",
+      "ua": "Інший предмет (вкажіть у коментарях)",
+      "ru": "Другой предмет (указать в комментариях)"
+    }
+  ]
+}

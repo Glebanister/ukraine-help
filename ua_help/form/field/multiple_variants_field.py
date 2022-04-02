@@ -58,7 +58,7 @@ class MultipleVariantsField(FormField[MultipleChoice]):
         return chosen
 
     def repr_value(self, value: MultipleChoice) -> str:
-        return ', '.join(map(lambda choice: f'"{choice[1]}"', value))
+        return ', '.join(map(lambda choice: f'{choice[1]}', value))
 
     def validate_value(self, value: MultipleChoice) -> Optional[Localized]:
         if self.bound_min is None and self.bound_max is None:

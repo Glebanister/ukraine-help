@@ -1,5 +1,4 @@
 import re
-from typing import Callable
 
 from ua_help.form.field.form_field import FormField
 from ua_help.form.field.radio_button_field import RadioButtonField

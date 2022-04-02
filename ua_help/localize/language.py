@@ -12,9 +12,9 @@ class Language(enum.Enum):
     @classmethod
     def from_str(cls, language_repr):
         patterns = {
-            Language.EN: ['en', 'english', 'eng', 'английский', 'англійська', 'англ'],
-            Language.UA: ['українська', 'украинский'],
-            Language.RU: ['русский', 'рус', 'ру']
+            Language.EN: ['language.en', 'en', 'english', 'eng', 'английский', 'англійська', 'англ'],
+            Language.UA: ['language.ua', 'українська', 'украинский'],
+            Language.RU: ['language.ru', 'русский', 'рус', 'ру']
         }
         for lang, patt in patterns.items():
             if language_repr.lower() in patt:

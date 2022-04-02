@@ -12,7 +12,7 @@ class RadioButtonField(FormField[Tuple[Localized, R]]):
             self,
             key: str,
             label: Localized,
-            choices:  List[Tuple[Localized, R]],
+            choices: List[Tuple[Localized, R]],
             localize: Callable[[Localized], str] = None
     ):
         super().__init__(key, label, None, localize)
@@ -38,7 +38,7 @@ class RadioButtonField(FormField[Tuple[Localized, R]]):
             raise ToInformUserExceptionWithInfo(InfoMessage.INDEX_ERROR.value)
 
     def repr_value(self, value: Tuple[Localized, R]) -> str:
-        return repr(value[1])
+        return str(value[1])
 
     def validate_value(self, value: Tuple[Localized, R]) -> Optional[Localized]:
         pass

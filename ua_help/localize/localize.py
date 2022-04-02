@@ -2,7 +2,7 @@ import dataclasses
 import enum
 import json
 from pathlib import Path
-from typing import List
+from typing import List, Callable
 
 from ua_help.localize.language import Language
 
@@ -63,6 +63,17 @@ class Localized:
             (Localized('Yes', 'Так', 'Да'), 'yes'),
             (Localized('No', 'Нi', 'Нет'), 'no'),
         ]
+
+
+def localize_to_all_languages(localized: Localized) -> str:
+    return '/'.join(map(lambda lang: localized.translate_to(lang), list(Language)))
+
+
+def localizer_to(lang: Language) -> Callable[[Localized], str]:
+    def localize(localized: Localized) -> str:
+        return localized.translate_to(lang)
+
+    return localize
 
 
 class InfoMessage(enum.Enum):
@@ -226,4 +237,22 @@ class InfoMessage(enum.Enum):
         "Not required",
         "Не обов'язково",
         "Не обязательно"
+    )
+
+    NO_FIELD_TO_SKIP = Localized(
+        "No field is being filled to skip it",
+        "Ніяке поле не заповнюється, нічого пропускати",
+        "Никакое поле не заполняется, нечего пропускать"
+    )
+
+    PUT_START_COMMAND = Localized(
+        "Enter the command /start to start filling",
+        "Введите команду /start чтобы начать заполнять",
+        "Введіть команду /start, щоб почати заповнювати"
+    )
+
+    FINISH_STUDENT_INPUT = Localized(
+        "You have finished filling out the form. As soon as we find a teacher for you, we will let you know",
+        "Вы закончили заполнение формы. Как только мы найдём вам учителя, мы вам сообщим",
+        "Ви закінчили заповнення форми. Як тільки ми знайдемо вам вчителя, ми повідомимо вас"
     )

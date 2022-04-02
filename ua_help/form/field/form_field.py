@@ -1,9 +1,13 @@
 import abc
+import logging
 from typing import TypeVar, Generic, Optional, Callable
 
 from ua_help.exception.categorized_exception import ToInformUserExceptionWithInfo, ToInformUserException
 from ua_help.exception.field_invalid_fill_exception import FieldInvalidFillException
 from ua_help.localize.localize import Localized, InfoMessage
+
+OutputStream = Callable[[str], None]
+InputStream = Callable[[], str]
 
 T = TypeVar('T')
 
@@ -21,6 +25,7 @@ class FormField(Generic[T], abc.ABC):
         self.value: Optional[T] = None
         self.default_value = default_value
         self.localize = localize
+        self.output: Optional[str] = None
 
     def loc_info(self, info: InfoMessage) -> str:
         if self.localize is None:
@@ -68,14 +73,16 @@ class FormField(Generic[T], abc.ABC):
                 return self.repr_value(self.default_value)
         return self.repr_value(self.value)
 
-    def read_value_retrying(self, input_stream: Callable[[], str], out_stream: Callable[[str], None]) -> str:
+    def print_info_to_stream(self, out_stream: OutputStream):
         out_stream(self.localize(self.info))
-        output = None
-        while output is None:
-            out_stream(self.print_help())
-            another_input = input_stream()
-            try:
-                output = self.parse_and_set_value(another_input)
-            except ToInformUserException as e:
-                out_stream(f'{self.loc_info(InfoMessage.SOME_ERROR)}: {e.localized(self.localize)}')
-        return output
+
+    def print_help_to_stream(self, out_stream: OutputStream):
+        out_stream(self.print_help())
+
+    def try_read_value(self, user_input: str, out_stream: OutputStream) -> Optional[str]:
+        try:
+            self.output = self.parse_and_set_value(user_input)
+            return self.output
+        except ToInformUserException as e:
+            out_stream(f'{self.loc_info(InfoMessage.SOME_ERROR)}: {e.localized(self.localize)}')
+            return None

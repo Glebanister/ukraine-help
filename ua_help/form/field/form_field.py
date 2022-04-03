@@ -1,13 +1,19 @@
 import abc
 import logging
-from typing import TypeVar, Generic, Optional, Callable
+from typing import TypeVar, Generic, Optional, Callable, Tuple, List
+
+import telegram
+from telegram import Update
+from telegram.ext import CallbackContext
 
 from ua_help.exception.categorized_exception import ToInformUserExceptionWithInfo, ToInformUserException
 from ua_help.exception.field_invalid_fill_exception import FieldInvalidFillException
 from ua_help.localize.localize import Localized, InfoMessage
+from ua_help.telegram.util import send_error
 
 OutputStream = Callable[[str], None]
 InputStream = Callable[[], str]
+TelegramContext = Tuple[Update, CallbackContext]
 
 T = TypeVar('T')
 
@@ -16,12 +22,12 @@ class FormField(Generic[T], abc.ABC):
     def __init__(
             self,
             key: str,
-            info: Localized,
+            label: Localized,
             default_value: Optional[T],
             localize: Optional[Callable[[Localized], str]]
     ):
         self.key = key
-        self.info = info
+        self.label = label
         self.value: Optional[T] = None
         self.default_value = default_value
         self.localize = localize
@@ -36,11 +42,11 @@ class FormField(Generic[T], abc.ABC):
         self.localize = localize
 
     @abc.abstractmethod
-    def print_help(self) -> str:
+    def send_help(self, tg: TelegramContext) -> None:
         pass
 
     @abc.abstractmethod
-    def parse_input(self, s: str) -> T:
+    def parse_input(self, s: str) -> Optional[T]:
         pass
 
     @abc.abstractmethod
@@ -54,10 +60,12 @@ class FormField(Generic[T], abc.ABC):
     def has_no_default(self):
         return self.default_value is None
 
-    def parse_and_set_value(self, string_repr: str) -> str:
+    def parse_and_set_value(self, string_repr: str) -> Optional[str]:
         if string_repr == '':
             return self.print_value()
         parsed_value = self.parse_input(string_repr)
+        if parsed_value is None:
+            return None
         if self.validate_value is not None:
             error = self.validate_value(parsed_value)
             if error is not None:
@@ -73,16 +81,10 @@ class FormField(Generic[T], abc.ABC):
                 return self.repr_value(self.default_value)
         return self.repr_value(self.value)
 
-    def print_info_to_stream(self, out_stream: OutputStream):
-        out_stream(self.localize(self.info))
-
-    def print_help_to_stream(self, out_stream: OutputStream):
-        out_stream(self.print_help())
-
-    def try_read_value(self, user_input: str, out_stream: OutputStream) -> Optional[str]:
+    def try_read_value(self, user_input: str, tg: TelegramContext) -> Optional[str]:
         try:
             self.output = self.parse_and_set_value(user_input)
             return self.output
         except ToInformUserException as e:
-            out_stream(f'{self.loc_info(InfoMessage.SOME_ERROR)}: {e.localized(self.localize)}')
+            send_error(f'{self.loc_info(InfoMessage.SOME_ERROR)}: {e.localized(self.localize)}', tg)
             return None

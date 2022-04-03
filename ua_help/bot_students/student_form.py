@@ -6,12 +6,13 @@ from ua_help.form.field.multiple_variants_field import MultipleVariantsField
 from ua_help.form.field.radio_button_field import RadioButtonField
 from ua_help.form.field.text_field import TextField
 from ua_help.form.form import TextForm
-from ua_help.localize.localize import Localized
+from ua_help.localize.localize import Localized, InfoMessage
 
 
 def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localized], str]) -> TextForm:
     form = TextForm(
         Localized.from_folder(config.intro_folder),
+        InfoMessage.FINISH_STUDENT_INPUT.value,
         localize
     )
 
@@ -127,6 +128,22 @@ You will be asked to choose four priority subjects, among which you will also ne
             'Готовы заниматься с преподавателем из России'
         ),
         Localized.yes_no()
+    ))
+
+    form.add_field(TextField(
+        'comments',
+        Localized(
+            'Other comments',
+            'Коментарі до форми',
+            'Комментарии к форме'
+        ),
+        re.compile(r'.?'),
+        Localized(
+            'Any comment with one message',
+            'Будь-який коментар одним повідомленням',
+            'Любой комментарий одним сообщением'
+        ),
+        is_required=False
     ))
 
     return form

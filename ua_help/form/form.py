@@ -1,11 +1,15 @@
 import logging
 from typing import List, Callable, Optional, Dict, Tuple
 
+import telegram
+from telegram import ReplyKeyboardMarkup
+
 from ua_help.exception.categorized_exception import ToFailException
-from ua_help.form.field.form_field import FormField
+from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.form.field.common_fields import field_select_language
 from ua_help.localize.localize import Localized, InfoMessage
 from ua_help.localize.language import Language
+from ua_help.telegram.util import make_buttons
 
 OutputStream = Callable[[str], None]
 TableRow = List[Tuple[str, str]]
@@ -14,13 +18,20 @@ TableRow = List[Tuple[str, str]]
 class TextForm:
     def __init__(
             self,
-            info: Localized,
+            form_information: Localized,
+            form_finish_information: Localized,
             localize: Callable[[Localized], str]
     ):
-        self.info = info
+        self.form_information = form_information
+        self.form_finish_information = form_finish_information
         self.localize = localize
         self.fields: List[FormField] = []
         self.filled_fields: List[Tuple[str, str]] = []
+
+    def set_localize(self, localize: Callable[[Localized], str]):
+        self.localize = localize
+        for field in self.fields:
+            field.set_localize(self.localize)
 
     def add_field(self, field: FormField):
         self.fields.append(field)
@@ -32,26 +43,42 @@ class TextForm:
     def filled_fields(self) -> TableRow:
         return self.filled_fields
 
-    def print_info_to_stream(self, out_stream: OutputStream):
-        localized_info = self.localize(self.info)
-        out_stream(self.localize(self.info))
-        if self.fields:
-            self.fields[0].print_info_to_stream(out_stream)
-            self.fields[0].print_help_to_stream(out_stream)
+    def send_info_message(self, tg: TelegramContext):
+        update, context = tg
+        localized_info = self.localize(self.form_information)
 
-    def put_user_input(self, user_input: str, out_stream: OutputStream) -> Optional[TableRow]:
+        context.bot.send_message(
+            text=localized_info,
+            chat_id=update.effective_chat.id
+        )
+
+        if self.fields:
+            self.fields[0].send_help(tg)
+
+    def send_actual_field_info(self, tg: TelegramContext) -> None:
+        update, context = tg
+        assert not self.all_filled()
+        self.fields[len(self.filled_fields)].send_help(tg)
+
+    def put_user_input(self, user_input: str, tg: TelegramContext) -> Optional[TableRow]:
+        update, context = tg
+
         if self.all_filled():
             raise ToFailException('TextForm', 'All fields are already read')
         cur_field = self.fields[len(self.filled_fields)]
-        value_of_field = cur_field.try_read_value(user_input, out_stream)
+
+        value_of_field = cur_field.try_read_value(user_input, tg)
         if value_of_field is not None:
             self.filled_fields.append((cur_field.key, value_of_field))
             if self.all_filled():
-                out_stream(self.localize(InfoMessage.FINISH_STUDENT_INPUT.value))
+                context.bot.send_message(
+                    text=self.localize(self.form_finish_information),
+                    chat_id=update.effective_chat.id,
+                    reply_markup=ReplyKeyboardMarkup(make_buttons(['/start', '/language', '/help']))
+                )
                 return self.filled_fields
             else:
-                self.fields[len(self.filled_fields)].print_info_to_stream(out_stream)
-                self.fields[len(self.filled_fields)].print_help_to_stream(out_stream)
+                self.fields[len(self.filled_fields)].send_help(tg)
         else:
-            cur_field.print_help_to_stream(out_stream)
+            cur_field.send_help(tg)
         return self.filled_fields if self.all_filled() else None

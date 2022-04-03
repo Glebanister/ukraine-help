@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -23,6 +23,6 @@ class SpreadSheetDriver:
         LOGGER.info('Spreadsheet client initialized')
         self.sheet = self.client.open(spreadsheet_title).sheet1
 
-    def append_row(self, row: List[Tuple[str, str]]):
-        LOGGER.debug('Spreadsheet append row: {row}')
-        self.sheet.append_row(list(map(lambda kv: kv[1], row)))
+    def append_row(self, row: List[Tuple[str, str]]) -> Dict[str, str]:
+        LOGGER.debug(f'Spreadsheet append row: {row}')
+        return self.sheet.append_row(list(map(lambda kv: kv[1], row)))

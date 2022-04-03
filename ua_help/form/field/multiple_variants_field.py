@@ -1,12 +1,27 @@
+import dataclasses
 from typing import Callable, List, Optional, Iterable, TypeVar, Tuple
 
+import telegram
+from telegram import InlineKeyboardMarkup, ReplyKeyboardMarkup
+
 from ua_help.exception.categorized_exception import ToInformUserWithLocalizedMessage
-from ua_help.form.field.form_field import FormField
+from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
+from ua_help.telegram.util import make_buttons
 
 R = TypeVar('R')
 
 MultipleChoice = List[Tuple[Localized, R]]
+
+OPTION_NOT_CHOSEN = '➖'
+OPTION_CHOSEN = '✅'
+
+
+@dataclasses.dataclass
+class Option:
+    localized: Localized
+    value: R
+    chosen: bool
 
 
 class MultipleVariantsField(FormField[MultipleChoice]):
@@ -14,48 +29,121 @@ class MultipleVariantsField(FormField[MultipleChoice]):
             self,
             key: str,
             label: Localized,
-            choices: MultipleChoice,
+            choices: List[Tuple[Localized, R]],
             default_choice: Optional[MultipleChoice],
             bound_min: Optional[int],
             bound_max: Optional[int],
             localize: Optional[Callable[[Localized], str]] = None
     ):
         super().__init__(key, label, default_choice, localize)
-        self.choices = choices
+        self.choices = list(map(lambda choice: Option(choice[0], choice[1], False), choices))
         self.bound_min = bound_min
         self.bound_max = bound_max
 
     def localized_choices(self) -> Iterable[str]:
-        return map(self.localize, map(lambda x: x[0], self.choices))
 
-    def print_help(self) -> str:
-        choices = '\n'.join(map(lambda item: f'  {item[0] + 1}) {item[1]}', enumerate(self.localized_choices())))
-        bounds_min_str = f'{self.loc_info(InfoMessage.FROM)} {self.bound_min} ' if self.bound_min is not None else ''
-        bounds_max_str = f'{self.loc_info(InfoMessage.TO)} {self.bound_max} ' if self.bound_max is not None else ''
-        bounds_str = f'{self.loc_info(InfoMessage.CHOOSE)} {bounds_min_str}{bounds_max_str}{self.loc_info(InfoMessage.CHOICE_PLURAL)}'
+        def format_choice(choice: Option) -> str:
+            localized_choice = self.localize(choice.localized)
+            if_chosen = OPTION_CHOSEN if choice.chosen else OPTION_NOT_CHOSEN
+            return f'{if_chosen} {localized_choice}'
 
-        return f'''{choices}
-{self.loc_info(InfoMessage.LIST_WITH_COMMA)}
-{bounds_str}
-'''
+        return list(map(format_choice, self.choices)) + [f'{self.localize(InfoMessage.SUBMIT_MULTICHOICE.value)}']
 
-    def parse_input(self, s: str) -> MultipleChoice:
-        user_choices: List[str] = list(map(lambda x: x.strip(), s.split(',')))
-        chosen: MultipleChoice = []
-        for user_choice in user_choices:
-            try:
-                s_as_index = int(user_choice) - 1
-                s_as_choice = self.choices[s_as_index]
-                if s_as_choice in chosen:
-                    raise ToInformUserWithLocalizedMessage(
-                        f'{self.loc_info(InfoMessage.EACH_MUST_OCCUR_ONCE)} ({user_choice})')
-                chosen.append(s_as_choice)
-            except ValueError:
-                raise ToInformUserWithLocalizedMessage(
-                    f'{self.loc_info(InfoMessage.INVALID_INPUT_FORMAT)}: {user_choice}')
-            except IndexError:
-                raise ToInformUserWithLocalizedMessage(f'{self.loc_info(InfoMessage.INDEX_ERROR)}: {user_choice}')
-        return chosen
+    def chosen_count(self):
+        return sum(map(lambda choice: int(choice.chosen), self.choices))
+
+    def __must_choose_some_but_not(self) -> bool:
+        return self.bound_min is not None and self.bound_min == 1 and self.chosen_count() == 0
+
+    def __matches_min_bound(self) -> bool:
+        return self.bound_min is None or self.bound_min <= self.chosen_count()
+
+    def __matches_max_bound(self) -> bool:
+        return self.bound_max is None or self.chosen_count() <= self.bound_max
+
+    def __get_min_bound_underflow(self) -> int:
+        if self.bound_min is None:
+            return 0
+        underflow = self.bound_min - self.chosen_count()
+        return max(underflow, 0)
+
+    def __get_max_bound_overflow(self) -> int:
+        if self.bound_max is None:
+            return 0
+        overflow = self.chosen_count() - self.bound_max
+        return max(overflow, 0)
+
+    def __make_overflow_message(self) -> str:
+        return f'{self.loc_info(InfoMessage.CAN_CHOOSE_NO_MORE_THAN)} {self.bound_max} {self.loc_info(InfoMessage.CHOICE_PLURAL)}'
+
+    def __make_underflow_message(self):
+        return f'{self.loc_info(InfoMessage.MUST_CHOOSE_AT_LEAST)} {self.bound_min} {self.loc_info(InfoMessage.CHOICE_PLURAL)}'
+
+    def send_help(self, tg: TelegramContext) -> None:
+        update, context = tg
+
+        bounds_str = ''
+
+        if self.__must_choose_some_but_not():
+            bounds_str += self.loc_info(InfoMessage.PLEASE_CHOOSE_AT_LEAST_ONE)
+        else:
+            overflow = self.__get_max_bound_overflow()
+            underflow = self.__get_min_bound_underflow()
+
+            if overflow > 0:
+                bounds_str += self.__make_overflow_message()
+            elif underflow > 0:
+                bounds_str += self.__make_underflow_message()
+
+        how_to_submit = ''
+        if not bounds_str:
+            how_to_submit += f"{self.loc_info(InfoMessage.IF_YOU_FINISHED_SUBMIT)} '{self.loc_info(InfoMessage.SUBMIT_MULTICHOICE)}'"
+
+        context.bot.send_message(
+            text=f'*{bounds_str}*{how_to_submit}',
+            chat_id=update.effective_chat.id,
+            parse_mode=telegram.ParseMode.MARKDOWN_V2,
+            reply_markup=ReplyKeyboardMarkup(make_buttons(self.localized_choices()))
+        )
+
+    def __add_option(self, index: int) -> None:
+        assert index < len(self.choices)
+        assert not self.choices[index].chosen
+        self.choices[index].chosen = True
+
+    def __remove_option(self, index: int) -> None:
+        assert index < len(self.choices)
+        assert self.choices[index].chosen
+        self.choices[index].chosen = False
+
+    def __submit_choice(self) -> MultipleChoice:
+        if not self.__matches_max_bound():
+            raise ToInformUserWithLocalizedMessage(self.__make_overflow_message())
+        if self.__must_choose_some_but_not():
+            raise ToInformUserWithLocalizedMessage(
+                f'{self.loc_info(InfoMessage.EMPTY_MULTICHOICE)}'
+            )
+        if not self.__matches_min_bound():
+            raise ToInformUserWithLocalizedMessage(self.__make_underflow_message())
+
+        return list(map(
+            lambda option: (option.localized, option.value),
+            filter(lambda option: option.chosen, self.choices)
+        ))
+
+    def parse_input(self, user_input: str) -> Optional[MultipleChoice]:
+        try:
+            user_input_index = list(self.localized_choices()).index(user_input)
+            if user_input_index == len(self.choices):
+                return self.__submit_choice()
+            elif self.choices[user_input_index].chosen:
+                self.__remove_option(user_input_index)
+            else:
+                self.__add_option(user_input_index)
+            return None
+        except ValueError:
+            raise ToInformUserWithLocalizedMessage(
+                f'{self.loc_info(InfoMessage.CHOICE_NOT_IN_LIST)}: {user_input}')
 
     def repr_value(self, value: MultipleChoice) -> str:
         return ', '.join(map(lambda choice: f'{choice[1]}', value))

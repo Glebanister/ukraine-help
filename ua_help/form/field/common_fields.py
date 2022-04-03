@@ -8,18 +8,19 @@ from ua_help.localize.language import Language
 
 
 def field_select_language() -> FormField:
-    def localize_to_all(info: Localized) -> str:
-        return '/'.join(map(lambda lang: info.translate_to(lang), list(Language)))
+    def localize_to_non_empty(info: Localized) -> str:
+        translated_to_all = map(lambda lang: info.translate_to(lang), list(Language))
+        return '/'.join(filter(lambda tr: tr != '', translated_to_all))
 
     return RadioButtonField(
         'language',
         Localized("Interface language", "Виберіть мову інтерфейсу", "Выберите язык интерфейса"),
         [
-            (Localized("English", "Англійська", "Английский"), Language.EN),
-            (Localized("Ukrainian", "Українська", "Украинский"), Language.UA),
-            (Localized("Russian", "Російська", "Русский"), Language.RU),
+            (Localized("English", "", ""), Language.EN),
+            (Localized("", "Українська", ""), Language.UA),
+            (Localized("", "", "Русский"), Language.RU),
         ],
-        localize_to_all,
+        localize_to_non_empty,
     )
 
 

@@ -17,9 +17,17 @@ def main():
     sheets_driver = SpreadSheetDriver(initial_config.gdrive_cred, initial_config.spreadsheet_name)
     bot = TelegramBot(
         initial_config.telegram_bot_token,
-        lambda: StudentBotCommandHandler(
+        lambda chat: StudentBotCommandHandler(
             StudentTelegramFormConfig(root),
-            lambda row: sheets_driver.append_row(row))
+            lambda row: sheets_driver.append_row(row),
+            chat
+        ),
+        [
+            'help',
+            'start',
+            'language',
+            'update'
+        ]
     )
 
     bot.run()

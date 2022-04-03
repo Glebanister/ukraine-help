@@ -253,6 +253,78 @@ class InfoMessage(enum.Enum):
 
     FINISH_STUDENT_INPUT = Localized(
         "You have finished filling out the form. As soon as we find a teacher for you, we will let you know",
+        "Ви закінчили заповнення форми. Як тільки ми знайдемо вам вчителя, ми повідомимо вас",
         "Вы закончили заполнение формы. Как только мы найдём вам учителя, мы вам сообщим",
-        "Ви закінчили заповнення форми. Як тільки ми знайдемо вам вчителя, ми повідомимо вас"
+    )
+
+    SUBMIT_MULTICHOICE = Localized(
+        "All options selected, continue",
+        "Усі варіанти обрані, продовжити",
+        "Все варианты выбраны, продолжить"
+    )
+
+    CAN_CHOOSE_NO_MORE_THAN = Localized(
+        "You can choose no more than",
+        "Ви можете вибрати не більше",
+        "Вы можете выбрать не более"
+    )
+
+    MUST_CHOOSE_AT_LEAST = Localized(
+        "You must choose at least",
+        "Ви повинні вибрати хоча б",
+        "Вы должны выбрать хотя бы"
+    )
+
+    PLEASE_CHOOSE_AT_LEAST_ONE = Localized(
+        "Choose at least one option",
+        "Виберіть хоча б один варіант",
+        "Выберите хотя бы один вариант"
+    )
+
+    IF_YOU_FINISHED_SUBMIT = Localized(
+        "When you have completed your selection, click the button",
+        "Якщо ви завершили вибір, натисніть кнопку",
+        "Если вы завершили выбор, нажмите кнопку"
+    )
+
+    LANGUAGE_IS_SET = Localized(
+        "Language is set",
+        "Мова успішно встановлена",
+        "Язык успешно установлен"
+    )
+
+    YOU_MAY_SUBMIT_MORE_FORMS = Localized(
+        "You can fill out more forms",
+        "Ви можете заповнити ще форми",
+        "Вы можете заполнить ещё форм"
+    )
+
+    FORMS_LIMIT_EXCEEDED = Localized(
+        "You have reached the limit of submitted forms",
+        "Ви вичерпали ліміт відправлених форм",
+        "Вы исчерпали лимит отправленных форм"
+    )
+
+    COMMAND_NOT_FOUND = Localized(
+        "Command not found",
+        "Введеної команди не існує",
+        "Введённой команды не существует"
+    )
+
+    INPUT_START_COMMAND_TO_FILL = Localized(
+        "Input command /start to fill another form",
+        "Введіть команду /start, щоб заповнити ще одну форму",
+        "Введите команду /start чтобы заполнить ещё одну форму"
+    )
+
+    SKIP_TEXT_FIELD = Localized(
+        "Skip this field",
+        "Пропустити це поле",
+        "Пропустить это поле"
+    )
+
+    STATE_UPDATED = Localized(
+        "State was updated",
+        "Стан оновлено",
+        "Состояние обновлено"
     )

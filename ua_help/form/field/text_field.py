@@ -1,34 +1,55 @@
 import re
 from typing import Optional, Callable
 
-from ua_help.form.field.form_field import FormField
+import telegram
+from telegram import InlineKeyboardMarkup, ReplyKeyboardRemove, ReplyKeyboardMarkup
+
+from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
+from ua_help.telegram.util import make_buttons
 
 
 class TextField(FormField[str]):
     def __init__(
             self,
             key: str,
-            info: Localized,
+            label: Localized,
             pattern: re.Pattern,
             pattern_explanation: Localized,
             is_required: bool,
             localize: Optional[Callable[[Localized], str]] = None
     ):
-        super().__init__(key, info, None, localize)
+        super().__init__(key, label, None, localize)
         self.pattern = pattern
         self.pattern_explanation = pattern_explanation
         self.is_required = is_required
 
-    def print_help(self) -> str:
-        required_str = self.loc_info(InfoMessage.NOT_REQUIRED) if not self.is_required else self.loc_info(
-            InfoMessage.REQUIRED)
-        return f'''
-{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.info)} ({required_str})
-{self.loc_info(InfoMessage.INPUT_FORMAT)}: {self.localize(self.pattern_explanation)}
-'''
+    def send_help(self, tg: TelegramContext) -> None:
+        update, context = tg
+
+        required_str = f'{self.loc_info(InfoMessage.NOT_REQUIRED)}'
+
+        if self.is_required:
+            required_str = f'*{self.loc_info(InfoMessage.REQUIRED)}*'
+
+        help_markdown = f'''
+{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.label)} ({required_str})
+{self.loc_info(InfoMessage.INPUT_FORMAT)}: _{self.localize(self.pattern_explanation)}_
+        '''
+
+        def make_skip_button():
+            return make_buttons([self.loc_info(InfoMessage.SKIP_TEXT_FIELD)])
+
+        context.bot.send_message(
+            text=help_markdown,
+            chat_id=update.effective_chat.id,
+            parse_mode=telegram.ParseMode.MARKDOWN,
+            reply_markup=ReplyKeyboardRemove() if self.is_required else ReplyKeyboardMarkup(make_skip_button())
+        )
 
     def parse_input(self, s: str) -> str:
+        if s == self.loc_info(InfoMessage.SKIP_TEXT_FIELD):
+            return ''
         return s
 
     def repr_value(self, value: str) -> str:

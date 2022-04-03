@@ -2,7 +2,10 @@
   "spreadsheet_name": "Requests for help (Telegram)",
   "log_file": "bot_students.log",
   "intro": "intro",
+  "help": "help",
   "subjects": "subjects.json",
   "google_drive_credentials": "uahelp-7341e003881b.json",
-  "telegram_bot_token": "5240592042:AAEHMebYdfU1EMWGbTnBbXY_oTOEE0cGBeU"
+  "telegram_bot_token": "5240592042:AAEHMebYdfU1EMWGbTnBbXY_oTOEE0cGBeU",
+  "clients_data": "clients_data",
+  "default_language": "language.ru"
 }

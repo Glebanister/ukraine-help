@@ -13,14 +13,15 @@ def field_select_language() -> FormField:
         return '/'.join(filter(lambda tr: tr != '', translated_to_all))
 
     return RadioButtonField(
-        'language',
-        Localized("Interface language", "Виберіть мову інтерфейсу", "Выберите язык интерфейса"),
-        [
+        key='language',
+        label=Localized("Interface language", "Виберіть мову інтерфейсу", "Выберите язык интерфейса"),
+        choices=[
             (Localized("English", "", ""), Language.EN),
             (Localized("", "Українська", ""), Language.UA),
             (Localized("", "", "Русский"), Language.RU),
         ],
-        localize_to_non_empty,
+        is_required=True,
+        localize=localize_to_non_empty,
     )
 
 

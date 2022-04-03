@@ -30,28 +30,22 @@ class TextField(FormField[str]):
     def send_help(self, tg: TelegramContext) -> None:
         update, context = tg
 
-        required_str = f'({self.loc_info(InfoMessage.NOT_REQUIRED)})'
+        question = FormField.make_question(f'{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.label)}')
 
-        if self.is_required:
-            required_str = f'- *{self.loc_info(InfoMessage.REQUIRED)}*'
-
-        help_markdown = f'''
-{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.label)} {required_str}
+        help_markdown = f'''{question} {self.make_is_required(self.is_required)}
 {self.loc_info(InfoMessage.INPUT_FORMAT)}: _{self.localize(self.pattern_explanation)}_
         '''
-
-        def make_skip_button():
-            return make_buttons([self.loc_info(InfoMessage.SKIP_TEXT_FIELD)])
 
         context.bot.send_message(
             text=help_markdown,
             chat_id=update.effective_chat.id,
             parse_mode=telegram.ParseMode.MARKDOWN,
-            reply_markup=ReplyKeyboardRemove() if self.is_required else ReplyKeyboardMarkup(make_skip_button())
+            reply_markup=ReplyKeyboardRemove() if self.is_required else ReplyKeyboardMarkup(
+                make_buttons([self.make_skip_text()]))
         )
 
     def parse_input(self, s: str) -> str:
-        if s == self.loc_info(InfoMessage.SKIP_TEXT_FIELD):
+        if s == self.make_skip_text():
             return ''
         return s
 

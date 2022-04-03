@@ -23,8 +23,10 @@ class InfoField(FormField[str]):
     def send_help(self, tg: TelegramContext) -> None:
         update, context = tg
 
+        top_info = self.make_information(self.label)
+
         context.bot.send_message(
-            text=f'*{self.localize(self.label)}*\n\n{self.localize(self.information)}',
+            text=f'{top_info}\n\n{self.localize(self.information)}',
             chat_id=update.effective_chat.id,
             parse_mode=telegram.ParseMode.MARKDOWN
         )

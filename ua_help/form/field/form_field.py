@@ -41,6 +41,26 @@ class FormField(Generic[T], abc.ABC):
     def set_localize(self, localize: Callable[[Localized], str]):
         self.localize = localize
 
+    def make_skip_text(self):
+        return f'⏭️ {self.loc_info(InfoMessage.SKIP_TEXT_FIELD)} ⏭'
+
+    def make_submit_text(self):
+        return f'⏭️ {self.loc_info(InfoMessage.SUBMIT_MULTICHOICE)} ⏭'
+
+    @staticmethod
+    def make_question(text: str):
+        return f'🟢 *{text}*'
+
+    def make_information(self, text: Localized):
+        return f'ℹ️ _{self.localize(text)}_'
+
+    def make_is_required(self, is_required: bool) -> str:
+        required_str = f'({self.loc_info(InfoMessage.NOT_REQUIRED)})'
+
+        if is_required:
+            required_str = f'- *{self.loc_info(InfoMessage.REQUIRED)}*'
+        return required_str
+
     @abc.abstractmethod
     def send_help(self, tg: TelegramContext) -> None:
         pass

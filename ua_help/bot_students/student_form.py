@@ -36,21 +36,27 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
         [
             (Localized('Parent (guardian)', 'Батько (опікун)', 'Родитель (опекун)'), 'parent'),
             (Localized('Student', 'Учень', 'Ученик'), 'student'),
-        ]
+        ],
+        is_required=True,
     ))
 
     form.add_field(TextField(
         'name',
         Localized('Student\'s name', 'Ім\'я учня', 'Имя ученика'),
         re.compile(r'.*'),
-        Localized('Name in any language', 'Ім\'я будь-якою мовою', 'Имя на любом языке'),
+        Localized(
+            'First and last name in any language',
+            'Ім\'я та прізвище будь-якою мовою',
+            'Имя и фамилия на любом языке'
+        ),
         is_required=True
     ))
 
     form.add_field(RadioButtonField(
         'grade',
         Localized('Grade', 'Клас', 'Класс'),
-        Localized.integers(range(1, 13), Localized(' grade', 'клас', ' класс'))
+        Localized.integers(range(1, 13), Localized('grade', 'клас', 'класс')),
+        is_required=True,
     ))
 
     form.add_field(RadioButtonField(
@@ -60,22 +66,20 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
             'Випускний планується цього року',
             'Выпуск планировался в этом году'
         ),
-        Localized.yes_no()
+        Localized.yes_no(),
+        is_required=True,
     ))
 
     form.add_field(MultipleVariantsField(
         key='speaking_languages',
         label=Localized(
-            '''
-Languages in which they are willing to learn.
+            '''Languages in which they are willing to learn.
 If there is an additional language, select the "Other" option and you will have the opportunity to specify it at the end of the form
             ''',
-            '''
-Мови, на яких готові навчатися.
+            '''Мови, на яких готові навчатися.
 Якщо є додаткова мова, щоб вибрати варіант "Другой" і у вас буде у формі його вказівки
             ''',
-            '''
-Языки, на которых готовы обучаться.
+            '''Языки, на которых готовы обучаться.
 Если есть дополнительный язык, то выберите вариант 'Другой язык' и у вас будет в конце формы возможность его указать
             '''
         ),
@@ -119,7 +123,8 @@ If there is an additional language, select the "Other" option and you will have 
             'Предмет первого приоритета'
         ),
 
-        choices=Localized.choices_from_json(config.subjects_file)
+        choices=Localized.choices_from_json(config.subjects_file),
+        is_required=True,
     ))
 
     form.add_field(RadioButtonField(
@@ -129,8 +134,8 @@ If there is an additional language, select the "Other" option and you will have 
             'Предмет другого пріоритету',
             'Предмет второго приоритета'
         ),
-
-        choices=Localized.choices_from_json(config.subjects_file)
+        choices=Localized.choices_from_json(config.subjects_file),
+        is_required=False,
     ))
 
     form.add_field(RadioButtonField(
@@ -141,7 +146,8 @@ If there is an additional language, select the "Other" option and you will have 
             'Предмет третьего приоритета'
         ),
 
-        choices=Localized.choices_from_json(config.subjects_file)
+        choices=Localized.choices_from_json(config.subjects_file),
+        is_required=False,
     ))
 
     form.add_field(InfoField(
@@ -160,7 +166,8 @@ If there is an additional language, select the "Other" option and you will have 
             'Готові займатися з викладачем з Росії ',
             'Готовы заниматься с преподавателем из России'
         ),
-        Localized.yes_no()
+        Localized.yes_no(),
+        is_required=True,
     ))
 
     form.add_field(RadioButtonField(
@@ -184,7 +191,8 @@ If there is an additional language, select the "Other" option and you will have 
                 Localized('Didn\'t plan', 'Не планували', 'Не планировали'),
                 'no'
             ),
-        ]
+        ],
+        is_required=True,
     ))
 
     form.add_field(MultipleVariantsField(

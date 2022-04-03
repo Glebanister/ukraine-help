@@ -2,7 +2,7 @@ import re
 from typing import Optional, Callable
 
 import telegram
-from telegram import InlineKeyboardMarkup, ReplyKeyboardRemove, ReplyKeyboardMarkup
+from telegram import ReplyKeyboardRemove, ReplyKeyboardMarkup
 
 from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
@@ -10,6 +10,9 @@ from ua_help.telegram.util import make_buttons
 
 
 class TextField(FormField[str]):
+    def is_informational(self) -> bool:
+        return False
+
     def __init__(
             self,
             key: str,
@@ -27,13 +30,13 @@ class TextField(FormField[str]):
     def send_help(self, tg: TelegramContext) -> None:
         update, context = tg
 
-        required_str = f'{self.loc_info(InfoMessage.NOT_REQUIRED)}'
+        required_str = f'({self.loc_info(InfoMessage.NOT_REQUIRED)})'
 
         if self.is_required:
-            required_str = f'*{self.loc_info(InfoMessage.REQUIRED)}*'
+            required_str = f'- *{self.loc_info(InfoMessage.REQUIRED)}*'
 
         help_markdown = f'''
-{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.label)} ({required_str})
+{self.loc_info(InfoMessage.PLEASE_INPUT)} {self.localize(self.label)} {required_str}
 {self.loc_info(InfoMessage.INPUT_FORMAT)}: _{self.localize(self.pattern_explanation)}_
         '''
 

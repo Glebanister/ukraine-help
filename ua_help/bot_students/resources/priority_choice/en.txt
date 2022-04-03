@@ -1,0 +1,6 @@
+You will be asked to choose three subjects to search for teachers in. You will need to rank these subjects in order of priority.
+Subject 1 is your first priority. This is the subject for which we will look for a teacher first.
+Subject 2 - If we cannot immediately find a subject 1 teacher for you, we will try to find a subject 2 teacher for you.
+Subject 3 - This is a fallback option if we are unable to find a teacher for subjects 1 and 2. It is also an option for rare subjects. If teachers for these subjects are not available, we will provide them to you regardless of whether we have found teachers for subjects 1 and 2 before.
+
+You can give up your choice of subjects 2 and 3

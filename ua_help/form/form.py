@@ -27,6 +27,7 @@ class TextForm:
         self.localize = localize
         self.fields: List[FormField] = []
         self.filled_fields: List[Tuple[str, str]] = []
+        self.active_field_index = 0
 
     def set_localize(self, localize: Callable[[Localized], str]):
         self.localize = localize
@@ -38,47 +39,61 @@ class TextForm:
         field.set_localize(self.localize)
 
     def all_filled(self) -> bool:
-        return len(self.filled_fields) == len(self.fields)
+        return self.active_field_index == len(self.fields)
 
     def filled_fields(self) -> TableRow:
         return self.filled_fields
+
+    def send_help_for_current(self, tg: TelegramContext):
+        update, context = tg
+        next_field = self.active_field(tg)
+        if next_field is None:
+            context.bot.send_message(
+                text=self.localize(self.form_finish_information),
+                chat_id=update.effective_chat.id,
+                reply_markup=ReplyKeyboardMarkup(make_buttons(['/start', '/language', '/help']))
+            )
+            return self.filled_fields
+        else:
+            next_field.send_help(tg)
 
     def send_info_message(self, tg: TelegramContext):
         update, context = tg
         localized_info = self.localize(self.form_information)
 
         context.bot.send_message(
-            text=localized_info,
-            chat_id=update.effective_chat.id
+            text=f'*{localized_info}*',
+            chat_id=update.effective_chat.id,
+            parse_mode=telegram.ParseMode.MARKDOWN
         )
 
-        if self.fields:
-            self.fields[0].send_help(tg)
+        self.send_help_for_current(tg)
+
+    def active_field(self, tg: TelegramContext) -> Optional[FormField]:
+        while not self.all_filled() and self.fields[self.active_field_index].is_informational():
+            self.fields[self.active_field_index].send_help(tg)
+            self.active_field_index += 1
+        return self.fields[self.active_field_index] if not self.all_filled() else None
 
     def send_actual_field_info(self, tg: TelegramContext) -> None:
-        update, context = tg
         assert not self.all_filled()
-        self.fields[len(self.filled_fields)].send_help(tg)
+        self.fields[self.active_field_index].send_help(tg)
 
     def put_user_input(self, user_input: str, tg: TelegramContext) -> Optional[TableRow]:
         update, context = tg
 
+        field_to_put_info = self.active_field(tg)
+
         if self.all_filled():
             raise ToFailException('TextForm', 'All fields are already read')
-        cur_field = self.fields[len(self.filled_fields)]
 
-        value_of_field = cur_field.try_read_value(user_input, tg)
+        assert field_to_put_info is not None
+
+        value_of_field = field_to_put_info.try_read_value(user_input, tg)
         if value_of_field is not None:
-            self.filled_fields.append((cur_field.key, value_of_field))
-            if self.all_filled():
-                context.bot.send_message(
-                    text=self.localize(self.form_finish_information),
-                    chat_id=update.effective_chat.id,
-                    reply_markup=ReplyKeyboardMarkup(make_buttons(['/start', '/language', '/help']))
-                )
-                return self.filled_fields
-            else:
-                self.fields[len(self.filled_fields)].send_help(tg)
+            self.filled_fields.append((field_to_put_info.key, value_of_field))
+            self.active_field_index += 1
+            self.send_help_for_current(tg)
         else:
-            cur_field.send_help(tg)
+            field_to_put_info.send_help(tg)
         return self.filled_fields if self.all_filled() else None

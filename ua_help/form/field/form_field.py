@@ -57,6 +57,10 @@ class FormField(Generic[T], abc.ABC):
     def validate_value(self, value: T) -> Optional[Localized]:
         pass
 
+    @abc.abstractmethod
+    def is_informational(self) -> bool:
+        return False
+
     def has_no_default(self):
         return self.default_value is None
 

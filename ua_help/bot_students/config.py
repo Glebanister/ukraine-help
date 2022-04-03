@@ -22,3 +22,5 @@ class StudentTelegramFormConfig:
         self.telegram_bot_token = raw_json['telegram_bot_token']
         self.clients_data = root / raw_json['clients_data']
         self.default_language = Language.from_str(raw_json['default_language'])
+        self.priority_choice = resources / raw_json['priority_choice']
+        self.languages_notice = resources / raw_json['languages_notice']

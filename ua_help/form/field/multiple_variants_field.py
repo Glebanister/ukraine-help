@@ -25,6 +25,9 @@ class Option:
 
 
 class MultipleVariantsField(FormField[MultipleChoice]):
+    def is_informational(self) -> bool:
+        return False
+
     def __init__(
             self,
             key: str,
@@ -100,9 +103,9 @@ class MultipleVariantsField(FormField[MultipleChoice]):
             how_to_submit += f"{self.loc_info(InfoMessage.IF_YOU_FINISHED_SUBMIT)} '{self.loc_info(InfoMessage.SUBMIT_MULTICHOICE)}'"
 
         context.bot.send_message(
-            text=f'*{bounds_str}*{how_to_submit}',
+            text=f'*{self.localize(self.label)}*\n{bounds_str}{how_to_submit}',
             chat_id=update.effective_chat.id,
-            parse_mode=telegram.ParseMode.MARKDOWN_V2,
+            parse_mode=telegram.ParseMode.MARKDOWN,
             reply_markup=ReplyKeyboardMarkup(make_buttons(self.localized_choices()))
         )
 

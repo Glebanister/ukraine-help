@@ -12,6 +12,9 @@ R = TypeVar('R')
 
 
 class RadioButtonField(FormField[Tuple[Localized, R]]):
+    def is_informational(self) -> bool:
+        return False
+
     def __init__(
             self,
             key: str,
@@ -20,7 +23,6 @@ class RadioButtonField(FormField[Tuple[Localized, R]]):
             localize: Callable[[Localized], str] = None
     ):
         super().__init__(key, label, None, localize)
-        self.label = label
         self.choices = choices
 
     def send_help(self, tg: TelegramContext) -> None:

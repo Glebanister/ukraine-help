@@ -1,0 +1,10 @@
+- For questions with a text answer, enter the answer in the input field. Or skip the question if there is a corresponding button
+
+- For single-choice questions, select the appropriate one. Sometimes it will be possible to skip the question ⏭️, and somewhere you can specify your option, you will also be told about it.
+
+- For questions that require multiple answers, click on the buttons to change the choice. ➖ means you didn't choose an option, and ✅ means you did.
+
+
+In all fields, except for text fields, options are mainly selected with buttons. If they are not automatically displayed for you, then try pressing the special button just to the right of the input field. If you don't see the button you need, try scrolling through the list.
+
+*You can start filling out the questionnaire again* by entering the /start command during the filling. And after the end, you can fill out a few more questionnaires by entering the same command.

@@ -2,12 +2,12 @@ import dataclasses
 from typing import Callable, List, Optional, Iterable, TypeVar, Tuple
 
 import telegram
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, Message
 
 from ua_help.exception.categorized_exception import ToInformUserWithLocalizedMessage
 from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
-from ua_help.telegram.util import make_buttons
+from ua_help.telegram.util import make_with_message_buttons, make_reply_buttons
 
 R = TypeVar('R')
 
@@ -43,12 +43,12 @@ class MultipleVariantsField(FormField[MultipleChoice]):
         self.bound_min = bound_min
         self.bound_max = bound_max
 
-    def localized_choices(self) -> Iterable[str]:
+    def localized_choices(self) -> List[Tuple[str, str]]:
 
-        def format_choice(choice: Option) -> str:
+        def format_choice(choice: Option) -> Tuple[str, str]:
             localized_choice = self.localize(choice.localized)
             if_chosen = OPTION_CHOSEN if choice.chosen else OPTION_NOT_CHOSEN
-            return f'{if_chosen} {localized_choice}'
+            return f'{if_chosen} {localized_choice}', choice.value
 
         return list(map(format_choice, self.choices)) + [self.make_submit_text()]
 
@@ -100,16 +100,22 @@ class MultipleVariantsField(FormField[MultipleChoice]):
 
         how_to_submit = ''
         if not bounds_str:
-            how_to_submit += f"{self.loc_info(InfoMessage.IF_YOU_FINISHED_SUBMIT)} '{self.make_submit_text()}'"
+            how_to_submit += f"{self.loc_info(InfoMessage.IF_YOU_FINISHED_SUBMIT)} '{self.make_submit_text()[0]}'"
 
         question = FormField.make_question(self.localize(self.label))
 
-        context.bot.send_message(
-            text=f'{question}\n{bounds_str}{how_to_submit}',
-            chat_id=update.effective_chat.id,
-            parse_mode=telegram.ParseMode.MARKDOWN,
-            reply_markup=ReplyKeyboardMarkup(make_buttons(self.localized_choices())),
-        )
+        kwargs = {
+            'text': f'{question}\n{bounds_str}{how_to_submit}',
+            'chat_id': update.effective_chat.id,
+            'parse_mode': telegram.ParseMode.MARKDOWN,
+            'reply_markup': make_with_message_buttons(self.localized_choices()),
+        }
+
+        if self.message is not None:
+            kwargs['message_id'] = self.message.message_id
+            context.bot.edit_message_text(**kwargs)
+        else:
+            self.message = context.bot.send_message(**kwargs)
 
     def __add_option(self, index: int) -> None:
         assert index < len(self.choices)
@@ -138,7 +144,7 @@ class MultipleVariantsField(FormField[MultipleChoice]):
 
     def parse_input(self, user_input: str) -> Optional[MultipleChoice]:
         try:
-            user_input_index = list(self.localized_choices()).index(user_input)
+            user_input_index = list(map(lambda choice: choice[1], self.localized_choices())).index(user_input)
             if user_input_index == len(self.choices):
                 return self.__submit_choice()
             elif self.choices[user_input_index].chosen:

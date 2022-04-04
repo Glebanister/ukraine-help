@@ -30,6 +30,15 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
         information=Localized.from_folder(config.intro_folder)
     ))
 
+    form.add_field(InfoField(
+        label=Localized(
+            'How to fill out the form',
+            'Як заповнювати форму',
+            'Как заполнять форму',
+        ),
+        information=Localized.from_folder(config.fill_instructions)
+    ))
+
     form.add_field(RadioButtonField(
         'role',
         Localized('Who are you?', 'Хто ви?', 'Кто вы?'),
@@ -38,6 +47,7 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
             (Localized('Student', 'Учень', 'Ученик'), 'student'),
         ],
         is_required=True,
+        allow_choose_other=False,
     ))
 
     form.add_field(TextField(
@@ -57,6 +67,7 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
         Localized('Grade', 'Клас', 'Класс'),
         Localized.integers(range(1, 13), Localized('grade', 'клас', 'класс')),
         is_required=True,
+        allow_choose_other=False,
     ))
 
     form.add_field(RadioButtonField(
@@ -68,6 +79,7 @@ def student_form(config: StudentTelegramFormConfig, localize: Callable[[Localize
         ),
         Localized.yes_no(),
         is_required=True,
+        allow_choose_other=False,
     ))
 
     form.add_field(MultipleVariantsField(
@@ -118,36 +130,39 @@ If there is an additional language, select the "Other" option and you will have 
     form.add_field(RadioButtonField(
         key='subject_1_priority',
         label=Localized(
-            'Subject of the first priority',
-            'Предмет першого пріоритету',
-            'Предмет первого приоритета'
+            'Subject of the 1st priority',
+            'Виберіть найпріоритетніший для вас предмет',
+            'Выберите самый приоритетный для вас предмет.'
         ),
 
         choices=Localized.choices_from_json(config.subjects_file),
         is_required=True,
+        allow_choose_other=False,
     ))
 
     form.add_field(RadioButtonField(
         key='subject_2_priority',
         label=Localized(
-            'Subject of the second priority',
-            'Предмет другого пріоритету',
-            'Предмет второго приоритета'
+            'Subject of the 2nd priority',
+            'Виберіть другий за важливістю для вас предмет (або не вибирайте нічого)',
+            'Выберите второй по важности для вас предмет (или не выбирайте ничего)'
         ),
         choices=Localized.choices_from_json(config.subjects_file),
         is_required=False,
+        allow_choose_other=False,
     ))
 
     form.add_field(RadioButtonField(
         key='subject_3_priority',
         label=Localized(
-            'Subject of the first priority',
-            'Предмет третього пріоритету',
-            'Предмет третьего приоритета'
+            'Subject of the 3rd priority',
+            'Виберіть третій за важливістю для вас предмет (або не вибирайте нічого)',
+            'Выберите третий по важности для вас предмет (или не выбирайте ничего)'
         ),
 
         choices=Localized.choices_from_json(config.subjects_file),
         is_required=False,
+        allow_choose_other=False,
     ))
 
     form.add_field(InfoField(
@@ -168,6 +183,7 @@ If there is an additional language, select the "Other" option and you will have 
         ),
         Localized.yes_no(),
         is_required=True,
+        allow_choose_other=False,
     ))
 
     form.add_field(RadioButtonField(
@@ -193,6 +209,7 @@ If there is an additional language, select the "Other" option and you will have 
             ),
         ],
         is_required=True,
+        allow_choose_other=True,
     ))
 
     form.add_field(MultipleVariantsField(
@@ -255,15 +272,6 @@ If there is an additional language, select the "Other" option and you will have 
         default_choice=None,
         bound_min=1,
         bound_max=None,
-    ))
-
-    form.add_field(InfoField(
-        label=Localized(
-            'Selecting Priority Subjects',
-            'Вибір пріоритетних предметів',
-            'Выбор приоритетных предметов'
-        ),
-        information=Localized.from_folder(config.priority_choice)
     ))
 
     form.add_field(TextField(

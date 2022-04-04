@@ -6,8 +6,7 @@ from telegram import InlineKeyboardMarkup, ReplyKeyboardRemove, ReplyKeyboardMar
 
 from ua_help.exception.categorized_exception import ToFailException
 from ua_help.form.field.form_field import FormField, TelegramContext
-from ua_help.localize.localize import Localized, InfoMessage
-from ua_help.telegram.util import make_buttons
+from ua_help.localize.localize import Localized
 
 
 class InfoField(FormField[str]):

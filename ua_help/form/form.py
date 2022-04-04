@@ -9,7 +9,7 @@ from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.form.field.common_fields import field_select_language
 from ua_help.localize.localize import Localized, InfoMessage
 from ua_help.localize.language import Language
-from ua_help.telegram.util import make_buttons
+from ua_help.telegram.util import make_reply_buttons
 
 OutputStream = Callable[[str], None]
 TableRow = List[Tuple[str, str]]
@@ -51,7 +51,7 @@ class TextForm:
             context.bot.send_message(
                 text=self.localize(self.form_finish_information),
                 chat_id=update.effective_chat.id,
-                reply_markup=ReplyKeyboardMarkup(make_buttons(['/start', '/language', '/help']))
+                reply_markup=make_reply_buttons(['/start', '/language', '/help'])
             )
             return self.filled_fields
         else:

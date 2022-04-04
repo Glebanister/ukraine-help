@@ -6,7 +6,7 @@ from telegram import ReplyKeyboardRemove, ReplyKeyboardMarkup
 
 from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
-from ua_help.telegram.util import make_buttons
+from ua_help.telegram.util import make_reply_buttons, make_with_message_buttons
 
 
 class TextField(FormField[str]):
@@ -34,18 +34,18 @@ class TextField(FormField[str]):
 
         help_markdown = f'''{question} {self.make_is_required(self.is_required)}
 {self.loc_info(InfoMessage.INPUT_FORMAT)}: _{self.localize(self.pattern_explanation)}_
-        '''
+'''
 
-        context.bot.send_message(
+        self.message = context.bot.send_message(
             text=help_markdown,
             chat_id=update.effective_chat.id,
             parse_mode=telegram.ParseMode.MARKDOWN,
-            reply_markup=ReplyKeyboardRemove() if self.is_required else ReplyKeyboardMarkup(
-                make_buttons([self.make_skip_text()]))
+            reply_markup=ReplyKeyboardRemove() if self.is_required else make_with_message_buttons(
+                [self.make_skip_text()])
         )
 
     def parse_input(self, s: str) -> str:
-        if s == self.make_skip_text():
+        if s in self.make_skip_text():
             return ''
         return s
 

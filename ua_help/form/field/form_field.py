@@ -3,7 +3,7 @@ import logging
 from typing import TypeVar, Generic, Optional, Callable, Tuple, List
 
 import telegram
-from telegram import Update
+from telegram import Update, Message
 from telegram.ext import CallbackContext
 
 from ua_help.exception.categorized_exception import ToInformUserExceptionWithInfo, ToInformUserException
@@ -32,6 +32,7 @@ class FormField(Generic[T], abc.ABC):
         self.default_value = default_value
         self.localize = localize
         self.output: Optional[str] = None
+        self.message: Optional[Message] = None
 
     def loc_info(self, info: InfoMessage) -> str:
         if self.localize is None:
@@ -42,10 +43,10 @@ class FormField(Generic[T], abc.ABC):
         self.localize = localize
 
     def make_skip_text(self):
-        return f'⏭️ {self.loc_info(InfoMessage.SKIP_TEXT_FIELD)} ⏭'
+        return f'⏭️ {self.loc_info(InfoMessage.SKIP_TEXT_FIELD)} ⏭', 'skip'
 
     def make_submit_text(self):
-        return f'⏭️ {self.loc_info(InfoMessage.SUBMIT_MULTICHOICE)} ⏭'
+        return f'⏭️ {self.loc_info(InfoMessage.SUBMIT_MULTICHOICE)} ⏭', 'submit'
 
     @staticmethod
     def make_question(text: str):
@@ -55,10 +56,10 @@ class FormField(Generic[T], abc.ABC):
         return f'ℹ️ _{self.localize(text)}_'
 
     def make_is_required(self, is_required: bool) -> str:
-        required_str = f'({self.loc_info(InfoMessage.NOT_REQUIRED)})'
+        required_str = f'\n\nℹ️ ({self.loc_info(InfoMessage.NOT_REQUIRED)})'
 
         if is_required:
-            required_str = f'- *{self.loc_info(InfoMessage.REQUIRED)}*'
+            required_str = f'\n\nℹ️ *{self.loc_info(InfoMessage.REQUIRED)}*'
         return required_str
 
     @abc.abstractmethod

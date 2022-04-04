@@ -24,3 +24,4 @@ class StudentTelegramFormConfig:
         self.default_language = Language.from_str(raw_json['default_language'])
         self.priority_choice = resources / raw_json['priority_choice']
         self.languages_notice = resources / raw_json['languages_notice']
+        self.fill_instructions = resources / raw_json['fill_instructions']

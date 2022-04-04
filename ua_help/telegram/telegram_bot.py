@@ -2,7 +2,7 @@ from typing import Callable, Dict, List
 
 import telegram.ext
 from telegram import Update, Chat
-from telegram.ext import Filters, MessageHandler
+from telegram.ext import Filters, MessageHandler, CallbackQueryHandler, CallbackContext
 
 from ua_help.common.command_handler import CommandHandler
 
@@ -25,15 +25,19 @@ class TelegramBot:
             return self.all_chats[chat.id]
 
         def command_wrapper(command: str):
-            def handle(update: Update, context: telegram.ext.CallbackContext):
+            def handle(update: Update, context: CallbackContext):
                 chat_handler = get_chat_handler(update.effective_chat)
                 chat_handler.handle_command(command, (update, context))
 
             return handle
 
-        def user_message_handler(update: Update, context: telegram.ext.CallbackContext):
+        def user_message_handler(update: Update, context: CallbackContext):
             chat_handler = get_chat_handler(update.effective_chat)
             chat_handler.handle_input(update.message.text, (update, context))
+
+        def query_handler(update: Update, context: CallbackContext):
+            chat_handler = get_chat_handler(update.effective_chat)
+            chat_handler.handle_input(update.callback_query.data, (update, context))
 
         for command_of_handler in all_commands:
             self.dispatcher.add_handler(telegram.ext.CommandHandler(
@@ -44,6 +48,10 @@ class TelegramBot:
         self.dispatcher.add_handler(MessageHandler(
             Filters.text & (~Filters.command),
             user_message_handler
+        ))
+
+        self.dispatcher.add_handler(CallbackQueryHandler(
+            query_handler
         ))
 
     def run(self):

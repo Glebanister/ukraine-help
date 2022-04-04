@@ -228,15 +228,15 @@ class InfoMessage(enum.Enum):
     )
 
     REQUIRED = Localized(
-        "Required",
-        "Обов'язково",
-        "Обязательно"
+        "Required field",
+        "Обов'язкове поле",
+        "Обязательное поле"
     )
 
     NOT_REQUIRED = Localized(
-        "Not required",
-        "Не обов'язково",
-        "Не обязательно"
+        "Not required field",
+        "Необов'язкове поле",
+        "Не обязательное поле"
     )
 
     NO_FIELD_TO_SKIP = Localized(
@@ -247,8 +247,8 @@ class InfoMessage(enum.Enum):
 
     PUT_START_COMMAND = Localized(
         "Enter the command /start to start filling",
-        "Введите команду /start чтобы начать заполнять",
-        "Введіть команду /start, щоб почати заповнювати"
+        "Введіть команду /start, щоб почати заповнювати",
+        "Введите команду /start чтобы начать заполнять"
     )
 
     FINISH_STUDENT_INPUT = Localized(
@@ -327,4 +327,16 @@ class InfoMessage(enum.Enum):
         "State was updated",
         "Стан оновлено",
         "Состояние обновлено"
+    )
+
+    INPUT_OTHER_WITH_KEYBOARD = Localized(
+        "You can enter your answer in the text field",
+        "Ви можете ввести свій варіант відповіді у текстовому полі",
+        "Можете ввести свой вариант ответа в текстовом поле"
+    )
+
+    OTHER_OPTION = Localized(
+        "Other option",
+        "Інший варіант",
+        "Другой вариант"
     )

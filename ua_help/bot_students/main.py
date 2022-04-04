@@ -1,3 +1,5 @@
+import argparse
+
 from pathlib import Path
 
 from ua_help.bot_students.config import StudentTelegramFormConfig
@@ -12,13 +14,24 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    root = Path('.')
-    initial_config = StudentTelegramFormConfig(root)
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--config', type=Path, help='Path to the config file', required=True)
+    arg_parser.add_argument('--root', type=Path, help='Path to the root folder (with resources)', required=True)
+
+    args = arg_parser.parse_args()
+
+    logging.info(f'root   = {args.root}')
+    logging.info(f'config = {args.config}')
+
+    root = args.root 
+    config = args.config
+
+    initial_config = StudentTelegramFormConfig(root, config)
     sheets_driver = SpreadSheetDriver(initial_config.gdrive_cred, initial_config.spreadsheet_name)
     bot = TelegramBot(
         initial_config.telegram_bot_token,
         lambda chat: StudentBotCommandHandler(
-            StudentTelegramFormConfig(root),
+            StudentTelegramFormConfig(root, config),
             lambda row: sheets_driver.append_row(row),
             chat
         ),

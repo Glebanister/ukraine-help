@@ -25,6 +25,8 @@ class JsonState(enum.Enum):
     FORMS_LIMIT = 'forms_limit'
     LAST_ACTIVITY = 'last_activity_datetime'
     CHOSEN_LANGUAGE = 'chosen_language'
+    TG_USERNAME = 'tg_username'
+    TG_ID = 'tg_id'
 
 
 class StudentBotState(enum.Enum):
@@ -60,12 +62,21 @@ class StudentBotCommandHandler(CommandHandler):
         this_client_file = (clients_folder / str(self.chat.id)).with_suffix('.json')
         return this_client_file
 
-    def flush_state_to_disk(self):
+    def flush_state_to_disk(self, tg: TelegramContext):
+        msg = tg[0].message
+
+        user = None if msg is None else msg.from_user
+
+        tg_username = str(user.username) if user is not None else None
+        tg_id = str(user.id) if user is not None else None
+
         state = {
             JsonState.SENT_FORMS.value: self.sent_forms,
             JsonState.FORMS_LIMIT.value: self.forms_limit,
             JsonState.LAST_ACTIVITY.value: str(self.last_activity_datetime.isoformat()),
-            JsonState.CHOSEN_LANGUAGE.value: None if self.chosen_language is None else str(self.chosen_language.name)
+            JsonState.CHOSEN_LANGUAGE.value: None if self.chosen_language is None else str(self.chosen_language.name),
+            JsonState.TG_USERNAME.value: tg_username,
+            JsonState.TG_ID.value: tg_id
         }
         with self.chat_file_path().open('w') as chat_file:
             chat_file.write(json.dumps(state))
@@ -164,7 +175,7 @@ class StudentBotCommandHandler(CommandHandler):
         except ToInformUserException as e:
             send_error(e.localized(self.translate), tg)
         finally:
-            self.flush_state_to_disk()
+            self.flush_state_to_disk(tg)
 
     def translate(self, localized: Localized):
         return localized.translate_to(
@@ -200,7 +211,7 @@ class StudentBotCommandHandler(CommandHandler):
         except ToInformUserException as e:
             send_error(e.localized(self.translate), tg)
         finally:
-            self.flush_state_to_disk()
+            self.flush_state_to_disk(tg)
 
     def handle_get_info(self, tg: TelegramContext) -> None:
         send_plain_text(self.translate(self.info), tg)

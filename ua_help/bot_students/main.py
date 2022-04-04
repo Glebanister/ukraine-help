@@ -10,6 +10,8 @@ from ua_help.telegram.telegram_bot import TelegramBot
 import logging
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    filename='bot_student.log',
+                    filemode='w',
                     level=logging.INFO)
 
 
@@ -23,24 +25,25 @@ def main():
     logging.info(f'root   = {args.root}')
     logging.info(f'config = {args.config}')
 
-    root = args.root 
+    root = args.root
     config = args.config
 
     initial_config = StudentTelegramFormConfig(root, config)
+
     sheets_driver = SpreadSheetDriver(initial_config.gdrive_cred, initial_config.spreadsheet_name)
     bot = TelegramBot(
-        initial_config.telegram_bot_token,
         lambda chat: StudentBotCommandHandler(
             StudentTelegramFormConfig(root, config),
             lambda row: sheets_driver.append_row(row),
             chat
         ),
-        [
+        all_commands=[
             'help',
             'start',
             'language',
             'update'
-        ]
+        ],
+        config=initial_config
     )
 
     bot.run()

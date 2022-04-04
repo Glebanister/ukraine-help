@@ -26,3 +26,4 @@ class StudentTelegramFormConfig:
         self.priority_choice = resources / raw_json['priority_choice']
         self.languages_notice = resources / raw_json['languages_notice']
         self.fill_instructions = resources / raw_json['fill_instructions']
+        self.host_url = raw_json['host_url']

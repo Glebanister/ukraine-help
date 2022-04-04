@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-bash -c 'conda run -n ukraine-help python main.py --root ~/ukraine-help/ua_help/bot_students/ --config ~/ukraine-help/ua_help/bot_students/resources/config_release.json'
+bash -c 'python main.py --root /app/ua_help/bot_students/ --config /app/ua_help/bot_students/resources/config_release.json'

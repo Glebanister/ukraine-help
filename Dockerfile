@@ -1,9 +1,11 @@
 FROM continuumio/miniconda
 WORKDIR .   
 COPY ./ ./
+RUN conda env create -f environment.yml
 
-RUN conda update conda
-RUN conda env create -f environment.yml -n ua_help
-RUN conda run -n ua_help
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
+
 EXPOSE 8080 
-ENTRYPOINT ["conda", "run", "-n", "ua_help", "python3", "ua_help/bot_students/main.py"]
+# The code to run when container is started:
+# ENTRYPOINT ["conda", "run", "-n", "myenv", "python3", "ua_help/bot_students/main.py"]

@@ -15,9 +15,9 @@ def field_select_language() -> FormField:
         key='language',
         label=Localized("Interface language", "Виберіть мову інтерфейсу", "Выберите язык интерфейса"),
         choices=[
-            (Localized('🇬🇧 English', '', ''), 'en'),
-            (Localized('🇺🇦 Українська', '', ''), 'ua'),
-            (Localized('🇷🇺 Русский', '', ''), 'ru'),
+            (Localized('English', 'Англійська', 'Английский'), 'en'),
+            (Localized('Ukrainian', 'Українська', 'Украинский'), 'ua'),
+            (Localized('Russian', 'Російська', 'Русский'), 'ru'),
         ],
         is_required=True,
         allow_choose_other=False,

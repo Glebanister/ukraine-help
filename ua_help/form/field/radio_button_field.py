@@ -71,7 +71,7 @@ class RadioButtonField(FormField[Tuple[Localized, R]]):
             raise ToInformUserExceptionWithInfo(InfoMessage.INVALID_INPUT_FORMAT.value)
 
     def repr_value(self, value: Tuple[Localized, R]) -> str:
-        return str(value[1])
+        return str(value[0].RU)
 
     def validate_value(self, value: Tuple[Localized, R]) -> Optional[Localized]:
         pass

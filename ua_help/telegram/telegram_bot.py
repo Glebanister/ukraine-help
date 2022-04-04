@@ -1,23 +1,26 @@
+import os
 from typing import Callable, Dict, List
 
 import telegram.ext
 from telegram import Update, Chat
 from telegram.ext import Filters, MessageHandler, CallbackQueryHandler, CallbackContext
 
+from ua_help.bot_students.config import StudentTelegramFormConfig
 from ua_help.common.command_handler import CommandHandler
 
 
 class TelegramBot:
     def __init__(
             self,
-            token: str,
             command_handler_producer: Callable[[Chat], CommandHandler],
-            all_commands: List[str]
+            all_commands: List[str],
+            config: StudentTelegramFormConfig
     ):
         self.command_handler_producer = command_handler_producer
         self.all_chats: Dict[Chat, CommandHandler] = {}
-        self.updater = telegram.ext.Updater(token, use_context=True)
+        self.updater = telegram.ext.Updater(config.telegram_bot_token, use_context=True)
         self.dispatcher = self.updater.dispatcher
+        self.config = config
 
         def get_chat_handler(chat: Chat) -> CommandHandler:
             if chat.id not in self.all_chats:

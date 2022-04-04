@@ -157,7 +157,7 @@ class MultipleVariantsField(FormField[MultipleChoice]):
                 f'{self.loc_info(InfoMessage.CHOICE_NOT_IN_LIST)}: {user_input}')
 
     def repr_value(self, value: MultipleChoice) -> str:
-        return ', '.join(map(lambda choice: f'{choice[1]}', value))
+        return ', '.join(map(lambda choice: f'{choice[0].RU}', value))
 
     def validate_value(self, value: MultipleChoice) -> Optional[Localized]:
         if self.bound_min is None and self.bound_max is None:

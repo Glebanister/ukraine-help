@@ -2,11 +2,11 @@ import re
 from typing import Optional, Callable
 
 import telegram
-from telegram import ReplyKeyboardRemove, ReplyKeyboardMarkup
+from telegram import ReplyKeyboardRemove
 
 from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.localize.localize import Localized, InfoMessage
-from ua_help.telegram.util import make_reply_buttons, make_with_message_buttons
+from ua_help.telegram.util import make_with_message_buttons
 
 
 class TextField(FormField[str]):

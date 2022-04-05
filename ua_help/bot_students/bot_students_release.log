@@ -8,3 +8,231 @@
 2022-04-05 14:11:01,216 - my-logger - INFO - Spreadsheet client initialized
 2022-04-05 14:11:03,637 - my-logger - INFO - Run bot with long pooling
 2022-04-05 14:11:03,638 - apscheduler.scheduler - INFO - Scheduler started
+2022-04-05 14:12:59,801 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:12:59,802 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:04,722 - my-logger - INFO - Config load from resources/config_release.json
+2022-04-05 14:13:04,723 - my-logger - INFO - Execute with config: {'spreadsheet_name': '[Release] Requests for help (Telegram)', 'log_file': 'bot_students_release.log', 'intro': 'intro', 'help': 'help', 'subjects': 'subjects.json', 'google_drive_credentials': 'uahelp-7341e003881b.json', 'telegram_bot_token': '5174665330:AAFRdmpisokCJIkfKYQ5M_WsQUw5nwdXPUU', 'clients_data': '/app/clients_data/v1/release', 'default_language': 'language.ru', 'priority_choice': 'priority_choice', 'languages_notice': 'languages_notice', 'fill_instructions': 'fill_instructions', 'host_url': 'https://ua-edu-bridge.herokuapp.com', 'use_webhook': False}
+2022-04-05 14:13:04,724 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/dispatcher.py", line 555, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/handler.py", line 198, in handle_update
+    return self.callback(update, context)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/telegram/telegram_bot.py", line 33, in handle
+    chat_handler = get_chat_handler(update.effective_chat)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/telegram/telegram_bot.py", line 28, in get_chat_handler
+    self.all_chats[chat.id] = self.command_handler_producer(chat)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/main.py", line 46, in <lambda>
+    lambda chat: StudentBotCommandHandler(
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 57, in __init__
+    self.reboot_state_from_disk()
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 85, in reboot_state_from_disk
+    chat_file_path = self.chat_file_path()
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 61, in chat_file_path
+    clients_folder.mkdir(exist_ok=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/pathlib.py", line 1287, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/app/clients_data/v1/release'
+2022-04-05 14:13:04,908 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:04,909 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:10,598 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:10,599 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:17,567 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:17,567 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:26,368 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:26,369 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:32,894 - my-logger - INFO - Config load from resources/config_release.json
+2022-04-05 14:13:32,895 - my-logger - INFO - Execute with config: {'spreadsheet_name': '[Release] Requests for help (Telegram)', 'log_file': 'bot_students_release.log', 'intro': 'intro', 'help': 'help', 'subjects': 'subjects.json', 'google_drive_credentials': 'uahelp-7341e003881b.json', 'telegram_bot_token': '5174665330:AAFRdmpisokCJIkfKYQ5M_WsQUw5nwdXPUU', 'clients_data': '/app/clients_data/v1/release', 'default_language': 'language.ru', 'priority_choice': 'priority_choice', 'languages_notice': 'languages_notice', 'fill_instructions': 'fill_instructions', 'host_url': 'https://ua-edu-bridge.herokuapp.com', 'use_webhook': False}
+2022-04-05 14:13:32,901 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/dispatcher.py", line 555, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/handler.py", line 198, in handle_update
+    return self.callback(update, context)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/telegram/telegram_bot.py", line 33, in handle
+    chat_handler = get_chat_handler(update.effective_chat)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/telegram/telegram_bot.py", line 28, in get_chat_handler
+    self.all_chats[chat.id] = self.command_handler_producer(chat)
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/main.py", line 46, in <lambda>
+    lambda chat: StudentBotCommandHandler(
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 57, in __init__
+    self.reboot_state_from_disk()
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 85, in reboot_state_from_disk
+    chat_file_path = self.chat_file_path()
+  File "/Users/glebmarin/projects/ukraine-help/ua_help/bot_students/student_bot_command_handler.py", line 61, in chat_file_path
+    clients_folder.mkdir(exist_ok=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/pathlib.py", line 1287, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/app/clients_data/v1/release'
+2022-04-05 14:13:34,971 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:34,971 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:46,675 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:13:46,676 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:14:02,209 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:14:02,209 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:14:23,617 - telegram.ext.updater - ERROR - Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:14:23,617 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 646, in _network_loop_retry
+    if not action_cb():
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/updater.py", line 597, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/ext/extbot.py", line 224, in get_updates
+    updates = super().get_updates(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
+    result = func(*args, **kwargs)
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 3054, in get_updates
+    self._post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
+    return self.request.post(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
+    result = self._request_wrapper(
+  File "/Users/glebmarin/.local/share/virtualenvs/ukraine-help-ykgATwqk/lib/python3.8/site-packages/telegram/utils/request.py", line 283, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2022-04-05 14:14:27,470 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2022-04-05 14:14:27,470 - apscheduler.scheduler - INFO - Scheduler has been shut down

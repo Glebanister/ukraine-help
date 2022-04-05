@@ -64,7 +64,7 @@ class TelegramBot:
             kwargs = {
                 'listen': '0.0.0.0',
                 'url_path': self.config.telegram_bot_token,
-                'port': int(os.environ.get('PORT', 5000))
+                'port': int(os.environ.get('PORT', 8443))
             }
             log.LOGGER.info(f'Run bot with webhook: {kwargs}, url: {webhook_url}')
             self.updater.start_webhook(**kwargs)

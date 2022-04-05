@@ -14,11 +14,11 @@ import logging
 def make_out_kwarg():
     config_index = sys.argv.index('--config')
     config_value = sys.argv[config_index + 1]
-    return None if 'test' in config_value else {'filename': config_value, 'filemode': 'w'}
+    return {'level': logging.DEBUG} if 'test' in config_value else {'level': logging.INFO, 'filename': config_value,
+                                                                    'filemode': 'w'}
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO,
                     **make_out_kwarg())
 
 

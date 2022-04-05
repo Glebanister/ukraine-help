@@ -10,5 +10,7 @@
   "default_language": "language.ru",
   "priority_choice": "priority_choice",
   "languages_notice": "languages_notice",
-  "fill_instructions": "fill_instructions"
+  "fill_instructions": "fill_instructions",
+  "host_url": null,
+  "use_webhook": false
 }

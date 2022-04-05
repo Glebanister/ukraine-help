@@ -10,12 +10,22 @@ from ua_help.telegram.telegram_bot import TelegramBot
 
 import logging
 
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument('--config', type=Path, help='Path to the config file', required=True)
+arg_parser.add_argument('--root', type=Path, help='Path to the root folder (with resources)', required=True)
+args = arg_parser.parse_args()
+initial_config = StudentTelegramFormConfig(args.root, args.config)
+
 
 def make_out_kwarg():
-    config_index = sys.argv.index('--config')
-    config_value = sys.argv[config_index + 1]
-    return {'level': logging.DEBUG} if 'test' in config_value else {'level': logging.INFO, 'filename': config_value,
-                                                                    'filemode': 'w'}
+    config_value = str(args.config)
+    return {
+        'level': logging.DEBUG
+    } if 'test' in config_value else {
+        'level': logging.INFO,
+        'filename': initial_config.log_file,
+        'filemode': 'w'
+    }
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -23,12 +33,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--config', type=Path, help='Path to the config file', required=True)
-    arg_parser.add_argument('--root', type=Path, help='Path to the root folder (with resources)', required=True)
-
-    args = arg_parser.parse_args()
-
     logging.info(f'root   = {args.root}')
     logging.info(f'config = {args.config}')
 

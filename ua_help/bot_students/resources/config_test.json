@@ -6,11 +6,11 @@
   "subjects": "subjects.json",
   "google_drive_credentials": "uahelp-7341e003881b.json",
   "telegram_bot_token": "5240592042:AAEHMebYdfU1EMWGbTnBbXY_oTOEE0cGBeU",
-  "clients_data": "/app/clients_data/v1/test",
+  "clients_data": "/root/clients_data/v1/test",
   "default_language": "language.ru",
   "priority_choice": "priority_choice",
   "languages_notice": "languages_notice",
   "fill_instructions": "fill_instructions",
-  "host_url": "https://ua-edu-bridge.herokuapp.com",
+  "host_url": "https://138.68.110.37",
   "use_webhook": true
 }

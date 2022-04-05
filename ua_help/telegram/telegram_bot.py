@@ -6,6 +6,7 @@ from telegram import Update, Chat
 from telegram.ext import Filters, MessageHandler, CallbackQueryHandler, CallbackContext
 
 from ua_help.bot_students.config import StudentTelegramFormConfig
+from ua_help.common import log
 from ua_help.common.command_handler import CommandHandler
 
 
@@ -59,12 +60,15 @@ class TelegramBot:
 
     def run(self):
         if self.config.use_webhook:
-            self.updater.start_webhook(
-                listen='0.0.0.0',
-                url_path=self.config.telegram_bot_token,
-                port=int(os.environ.get('PORT', 5000)),
-                webhook_url=f'{self.config.host_url}/{self.config.telegram_bot_token}'
-            )
+            kwargs = {
+                'listen': '0.0.0.0',
+                'url_path': self.config.telegram_bot_token,
+                'port': int(os.environ.get('PORT', 5000)),
+                'webhook_url': f'{self.config.host_url}/{self.config.telegram_bot_token}'
+            }
+            log.LOGGER.info(f'Run bot with webhook: {kwargs}')
+            self.updater.start_webhook(**kwargs)
         else:
+            log.LOGGER.info(f'Run bot with long pooling')
             self.updater.start_polling()
         self.updater.idle()

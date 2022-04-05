@@ -9,7 +9,7 @@ from telegram import Chat
 from ua_help.bot_students.config import StudentTelegramFormConfig
 from ua_help.bot_students.student_form import student_form
 from ua_help.common.command_handler import CommandHandler
-from ua_help.exception.categorized_exception import ToInformUserWithLocalizedMessage, ToInformUserException
+from ua_help.exception.categorized_exception import ToInformUserException
 from ua_help.form.field.common_fields import field_select_language
 from ua_help.form.field.form_field import FormField, TelegramContext
 from ua_help.form.form import TextForm

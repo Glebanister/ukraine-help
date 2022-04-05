@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from pathlib import Path
 
@@ -9,8 +10,15 @@ from ua_help.telegram.telegram_bot import TelegramBot
 
 import logging
 
+
+def is_test():
+    config_index = sys.argv.index('--config')
+    config_value = sys.argv[config_index + 1]
+    return 'test' in config_value
+
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='bot_student.log',
+                    filename=f'bot_student{"test" if is_test() else "release"}.log',
                     filemode='w',
                     level=logging.INFO)
 

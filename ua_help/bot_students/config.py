@@ -27,3 +27,4 @@ class StudentTelegramFormConfig:
         self.languages_notice = resources / raw_json['languages_notice']
         self.fill_instructions = resources / raw_json['fill_instructions']
         self.host_url = raw_json['host_url']
+        self.use_webhook = raw_json['use_webhook']

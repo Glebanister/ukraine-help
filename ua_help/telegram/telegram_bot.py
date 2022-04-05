@@ -58,11 +58,13 @@ class TelegramBot:
         ))
 
     def run(self):
-        # self.updater.start_webhook(
-        #     listen='0.0.0.0',
-        #     url_path=self.config.telegram_bot_token,
-        #     port=int(os.environ.get('PORT', 5000)),
-        #     webhook_url=f'{self.config.host_url}/{self.config.telegram_bot_token}'
-        # )
-        self.updater.start_polling()
+        if self.config.use_webhook:
+            self.updater.start_webhook(
+                listen='0.0.0.0',
+                url_path=self.config.telegram_bot_token,
+                port=int(os.environ.get('PORT', 5000)),
+                webhook_url=f'{self.config.host_url}/{self.config.telegram_bot_token}'
+            )
+        else:
+            self.updater.start_polling()
         self.updater.idle()

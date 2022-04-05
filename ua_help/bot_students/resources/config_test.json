@@ -1,6 +1,6 @@
 {
   "spreadsheet_name": "[Test] Requests for help (Telegram)",
-  "log_file": "bot_students.log",
+  "log_file": "bot_students_test.log",
   "intro": "intro",
   "help": "help",
   "subjects": "subjects.json",
@@ -11,6 +11,6 @@
   "priority_choice": "priority_choice",
   "languages_notice": "languages_notice",
   "fill_instructions": "fill_instructions",
-  "host_url": "https://ua-edu-bridge.herokuapp.com/",
+  "host_url": "https://ua-edu-bridge.herokuapp.com",
   "use_webhook": true
 }

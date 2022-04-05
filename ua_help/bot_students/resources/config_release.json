@@ -1,6 +1,6 @@
 {
   "spreadsheet_name": "[Release] Requests for help (Telegram)",
-  "log_file": "bot_students.log",
+  "log_file": "bot_students_release.log",
   "intro": "intro",
   "help": "help",
   "subjects": "subjects.json",

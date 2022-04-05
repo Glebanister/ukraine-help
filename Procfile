@@ -1,1 +1,1 @@
-web: bash ./ua_help/bot_students/run_release.sh
+web: bash /app/ua_help/bot_students/run_release.sh

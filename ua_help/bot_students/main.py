@@ -18,7 +18,6 @@ def make_out_kwarg():
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filemode='w',
                     level=logging.INFO,
                     **make_out_kwarg())
 

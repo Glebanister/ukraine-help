@@ -60,15 +60,15 @@ class TelegramBot:
 
     def run(self):
         if self.config.use_webhook:
-            webhook_url = f'{self.config.host_url}/{self.config.telegram_bot_token}'
+
             kwargs = {
                 'listen': '0.0.0.0',
                 'url_path': self.config.telegram_bot_token,
-                'port': 8443
+                'port': int(os.environ.get('PORT', 8443)),
+                'webhook_url': f'{self.config.host_url}/{self.config.telegram_bot_token}'
             }
-            log.LOGGER.info(f'Run bot with webhook: {kwargs}, url: {webhook_url}')
+            log.LOGGER.info(f'Run bot with webhook: {kwargs}')
             self.updater.start_webhook(**kwargs)
-            self.updater.bot.setWebhook(webhook_url)
         else:
             log.LOGGER.info(f'Run bot with long pooling')
             self.updater.start_polling()

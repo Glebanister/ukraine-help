@@ -11,16 +11,16 @@ from ua_help.telegram.telegram_bot import TelegramBot
 import logging
 
 
-def is_test():
+def make_out_kwarg():
     config_index = sys.argv.index('--config')
     config_value = sys.argv[config_index + 1]
-    return 'test' in config_value
+    return None if 'test' in config_value else {'filename': config_value, 'filemode': 'w'}
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename=f'bot_student{"test" if is_test() else "release"}.log',
                     filemode='w',
-                    level=logging.INFO)
+                    level=logging.INFO,
+                    **make_out_kwarg())
 
 
 def main():
